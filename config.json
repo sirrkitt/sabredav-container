@@ -1,79 +1,71 @@
 {
-  "settings": {
-    "http": {
-      "header_read_timeout": 30,
-      "body_read_timeout": 30,
-      "send_timeout": 30,
-      "idle_timeout": 30,
-      "max_body_size": 16777216
-    }
-  },
-  "listeners": {
-      "unix:/socket/sabredav/sabredav.sock": {
-          "pass": "routes"
-      }
-  },
-  "routes": [
-    {
-      "match": {
-        "uri": "/.well-known/caldav"
-      },
-      "action": {
-        "return": 301,
-        "location": "/server.php"
-      }
-    },
-    {
-      "match": {
-        "uri": "/.well-known/carddav"
-      },
-      "action": {
-        "return": 301,
-        "location": "/server.php"
-      }
-    },
-    {
-      "match": {
-        "uri": "/server.php"
-      },
-      "action": {
-        "pass": "applications/php/direct"
-      }
-    },
-    {
-      "action": {
-        "pass": "applications/php/default"
-      }
-    }
-  ],
+	"settings": {
+		"http": {
+			"header_read_timeout": 30,
+			"body_read_timeout": 30,
+			"send_timeout": 30,
+			"idle_timeout": 30,
+			"max_body_size": 16777216
+		}
+	},
+	"listeners": {
+		"unix:/socket/sabredav/sabredav.sock": {
+			"pass": "routes"
+		}
+	},
+	"routes": [{
+			"match": {
+				"uri": "/.well-known/caldav"
+			},
+			"action": {
+				"return": 301,
+				"location": "/"
+			}
+		},
+		{
+			"match": {
+				"uri": "/.well-known/carddav"
+			},
+			"action": {
+				"return": 301,
+				"location": "/"
+			}
+		},
+		{
+			"match": {
+				"uri": "/server.php"
+			},
+			"action": {
+				"return": 301,
+				"location": "/"
+			}
+		},
+		{
+			"action": {
+				"pass": "applications/php"
+			}
+		}
+	],
 
-  "applications": {
-      "php": {
-          "type": "php",
-          "processes": {
-            "max": 8,
-            "spare": 4,
-            "idle_timeout": 30
-          },
-          "targets": {
-            "direct": {
-              "root": "/srv/sabredav"
-             },
-            "default": {
-              "root": "/srv/sabredav",
-              "script": "server.php",
-              "index": "server.php"
-             }
-          },
-          "options": {
-              "admin": {
-                  "expose_php": "0",
-                  "output_buffering": "off"
-              },
-              "user": {
-                  "display_errors": "1"
-              }
-          }
-      }
-  }
+	"applications": {
+		"php": {
+			"type": "php",
+			"processes": {
+				"max": 8,
+				"spare": 4,
+				"idle_timeout": 30
+			},
+			"root": "/srv/sabredav",
+			"script": "server.php"
+		},
+		"options": {
+			"admin": {
+				"expose_php": "0",
+				"output_buffering": "off"
+			},
+			"user": {
+				"display_errors": "1"
+			}
+		}
+	}
 }

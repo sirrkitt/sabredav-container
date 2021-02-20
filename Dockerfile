@@ -27,6 +27,8 @@ FROM	alpine:3.13
 ENV	PUID=1010
 ENV	PGID=1010
 
+ENV	AUTOCONFIG="YES"
+
 COPY	--from=builder /opt /opt
 COPY	--from=builder /tmp/sabredav /srv/sabredav
 COPY	server.php /srv/sabredav/server.php
@@ -43,6 +45,6 @@ RUN	chmod +x /entrypoint.sh
 
 RUN	apk --no-cache add openssl imap-dev pcre2-dev libxml2-dev oniguruma sqlite-libs libldap libcurl curl icu-libs libpq libzip
 
-VOLUME	[ "/socket/control", "/socket/sabredav", "/data"]
+VOLUME	[ "/socket/control", "/socket/sabredav", "/data", "/config/php", "/config/unit" ]
 
-CMD	entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
